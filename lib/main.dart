@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
@@ -14,6 +16,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.cyan,
         accentColor: Colors.amber,
+        fontFamily: "Quick",
+        textTheme: ThemeData.light().textTheme.copyWith(
+              bodyText1: TextStyle(
+                fontFamily: "OpenSans",
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+        appBarTheme: AppBarTheme(
+            textTheme: ThemeData.light().textTheme.copyWith(
+                    bodyText2: TextStyle(
+                  fontFamily: "OpenSans",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ))),
       ),
       home: MyHomePage(),
     );
@@ -27,18 +44,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> transaction = [
-    Transaction(
-      id: 't1',
-      title: 'Mac Book Air',
-      amount: 890.56,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Mac Book Pro',
-      amount: 999.56,
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //   id: 't1',
+    //   title: 'Mac Book Air',
+    //   amount: 890.56,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 't2',
+    //   title: 'Mac Book Pro',
+    //   amount: 999.56,
+    //   date: DateTime.now(),
+    // ),
   ];
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTx = Transaction(
@@ -72,7 +89,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Expences App"),
+        title: Text(
+          "Expences App",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
         actions: [
           IconButton(
             onPressed: () => _startAddNewTrasaction(context),
@@ -80,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _startAddNewTrasaction(context),
@@ -97,7 +118,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("CHART!"),
               ),
             ),
-            TransactionList(transaction),
+            Center(
+              child: TransactionList(transaction),
+            )
           ],
         ),
       ),
