@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import '../widgets/chart.dart';
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
 import '../models/transaction.dart';
@@ -12,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Personal Expences App",
+      title: "Personal Expenses App",
       theme: ThemeData(
         primarySwatch: Colors.cyan,
         accentColor: Colors.amber,
@@ -43,7 +42,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> transaction = [
+  final List<Transaction> _usertransactions = [
     // Transaction(
     //   id: 't1',
     //   title: 'Mac Book Air',
@@ -57,16 +56,26 @@ class _MyHomePageState extends State<MyHomePage> {
     //   date: DateTime.now(),
     // ),
   ];
-  void _addNewTransaction(String txTitle, double txAmount) {
+
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
       id: DateTime.now().toString(),
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: chosenDate,
     );
     setState(() {
-      transaction.add(newTx);
+      _usertransactions.add(newTx);
     });
+  }
+
+  List<Transaction> get _recentTransactions {
+    return _usertransactions.where((tx) {
+      return tx.date.isAfter(DateTime.now().subtract(
+        Duration(days: 7),
+      ));
+    }).toList();
   }
 
   final titleController = TextEditingController();
@@ -85,12 +94,18 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _usertransactions.removeWhere((tx) => tx.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Expences App",
+          "Expenses App",
           style: Theme.of(context).textTheme.bodyText1,
         ),
         actions: [
@@ -110,16 +125,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity,
-              child: const Card(
-                color: Colors.blue,
-                elevation: 5,
-                child: Text("CHART!"),
-              ),
-            ),
+            Chart(_recentTransactions),
             Center(
-              child: TransactionList(transaction),
+              child: TransactionList(_usertransactions, _deleteTransaction),
             )
           ],
         ),
