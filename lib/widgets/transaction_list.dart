@@ -46,7 +46,7 @@ class TransactionList extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: Text(
-                                '\$${transaction[index].amount.toStringAsFixed(2)}',
+                                '₹${transaction[index].amount.toStringAsFixed(2)}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
